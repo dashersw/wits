@@ -1,0 +1,5 @@
+node_modules
+.history
+.vscode
+build
+lib/emokit-c

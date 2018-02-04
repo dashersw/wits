@@ -1,0 +1,24 @@
+{
+  "name": "wits",
+  "version": "1.0.0",
+  "description": "A Node.js library that reads your mind with Emotiv EPOC EEG headset",
+  "main": "index.js",
+  "keywords": [
+    "EEG",
+    "Emotiv"
+  ],
+  "scripts": {
+    "preinstall": "git clone https://github.com/dashersw/emokit-c.git lib/emokit-c",
+    "install": "node-gyp configure && node-gyp build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com:dashersw/wits.git"
+  },
+  "author": "Armagan Amcalar <armagan@amcalar.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bindings": "^1.3.0",
+    "node-addon-api": "^1.2.0"
+  }
+}
