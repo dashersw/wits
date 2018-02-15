@@ -11,15 +11,17 @@
       ],
       "target_name": "emotiv",
       "sources": [
+        "lib/fprintf_override.c",
         "lib/bindings.cc",
-        "lib/emokit-c/src/emokit.c",
+        "lib/emokit-c/src/emokit.c"
       ],
       "libraries": [
         "/usr/local/lib/libhidapi.0.dylib",
         "/usr/local/lib/libmcrypt.4.4.8.dylib"
       ],
       "defines": [
-        "EXTERNAL_API"
+        "EXTERNAL_API",
+        "fprintf=fprintf_override"
       ],
       "cflags!": [
         "-fno-exceptions"

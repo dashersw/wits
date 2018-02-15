@@ -88,6 +88,19 @@ Resumes the incoming data stream. Must be called after a `mind.pause()`.
 ### mind.close()
 Disconnects from the headset, stopping the data flow. Must be called after a mind.open().
 
+### mind.setLogger(logger)
+Sets a function to receive logs from the headset. By default all the logs will be output to the stdout/stderr. However in certain scenarios users may want to redirect these logs to another stream. This method gives one the ability to specify a function that will receive any logs coming from the library, so the user chooses where and how to display the logs.
+
+#### Parameters
+*`logger`* `function(string)`
+A handler function that will receive a single string parameter. Every time the library wants to log something, this function will receive it.
+
+Example:
+```js
+mind.setLogger(log => console.log(`[wits] ${log}`));
+mind.open() // now all the logs will stream to the console and will include a `[wits]` tag at the beginning.
+```
+
 ### Reading
 Object representing data values streamed from the headset. Passed as the first parameter to the callback provided within the `mind.read` call.
 

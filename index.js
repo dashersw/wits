@@ -5,6 +5,10 @@ let running = false;
 
 let _cb = () => { };
 
+function setLogger(logger) {
+    emotiv.setLogger(logger);
+}
+
 function open() {
     if (_open) return;
 
@@ -63,4 +67,6 @@ function _work(err, res) {
     emotiv.read(_work);
 }
 
-module.exports = { open, close, pause, read, resume };
+setLogger(console.log);
+
+module.exports = { open, close, pause, read, resume, setLogger };

@@ -19,6 +19,10 @@ typedef struct
 } carrier;
 
 carrier the_carrier;
+
+napi_ref logger_callback;
+
+napi_env global_env;
 carrier async_carrier[MAX_CANCEL_THREADS];
 
 void Execute(napi_env env, void *data)
@@ -227,6 +231,55 @@ napi_value read(napi_env env, napi_callback_info info)
     return nullptr;
 }
 
+void log(char * str) {
+    napi_status s;
+
+    napi_value argr[1];
+    napi_create_string_utf8(global_env, str, NAPI_AUTO_LENGTH, &argr[0]);
+
+    napi_value result;
+
+    if (!logger_callback) {
+        printf("%s", str);
+
+        return;
+    }
+
+    napi_value global;
+    s = napi_get_global(global_env, &global);
+
+    napi_value title;
+    napi_create_string_utf8(global_env, "emotiv::log", NAPI_AUTO_LENGTH, &title);
+
+    napi_value argv[1];
+    napi_create_string_utf8(global_env, str, NAPI_AUTO_LENGTH, &argv[0]);
+
+    napi_value callback;
+    s = napi_get_reference_value(global_env, logger_callback, &callback);
+    assert(s == napi_ok);
+
+    s = napi_make_callback(global_env, NULL, global, callback, 1, argv, &result);
+    assert(s == napi_ok);
+}
+
+napi_value setLogger(napi_env env, napi_callback_info info) {
+    napi_status status;
+
+    size_t argc = 1;
+    napi_value argv[1];
+    napi_value _this;
+    void *data;
+
+    status = napi_get_cb_info(env, info, &argc, argv, &_this, &data);
+    assert(status == napi_ok);
+
+    status = napi_create_reference(env, argv[0], 1, &logger_callback);
+
+    assert(status == napi_ok);
+
+    return nullptr;
+}
+
 napi_value disconnect(napi_env env, napi_callback_info info)
 {
     close();
@@ -250,16 +303,20 @@ napi_value _connect(napi_env env, napi_callback_info info)
 napi_value Init(napi_env env, napi_value exports)
 {
     napi_status status;
+    global_env = env;
 
     napi_property_descriptor properties[] = {
         DECLARE_NAPI_PROPERTY("read", read),
         DECLARE_NAPI_PROPERTY("connect", _connect),
         DECLARE_NAPI_PROPERTY("disconnect", disconnect),
+        DECLARE_NAPI_PROPERTY("setLogger", setLogger),
     };
 
     status = napi_define_properties(env, exports, sizeof(properties) / sizeof(*properties), properties);
 
     assert(status == napi_ok);
+
+    fprintf(stdout, "set logger", NULL, log);
     return exports;
 }
 

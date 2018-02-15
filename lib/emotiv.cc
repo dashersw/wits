@@ -9,7 +9,7 @@ struct emokit_device *d;
 
 void close()
 {
-    printf("closing...\n");
+    fprintf(stdout, "closing...\n");
 
     quit = 1;
 
@@ -33,7 +33,7 @@ int connect()
 
     d = emokit_create();
     int count = emokit_get_count(d, EMOKIT_VID, EMOKIT_PID);
-    printf("Current epoc devices connected: %d\n", count);
+    fprintf(stdout, "Current epoc devices connected: %d\n", count);
 
     int r = emokit_open(d, EMOKIT_VID, EMOKIT_PID, 1);
     if (r != 0)
@@ -44,11 +44,11 @@ int connect()
         r = emokit_open(d, EMOKIT_VID, EMOKIT_PID, 0);
         if (r != 0)
         {
-            printf("CANNOT CONNECT: %d\n", r);
+            fprintf(stderr, "CANNOT CONNECT: %d\n", r);
             return 1;
         }
     }
-    printf("Connected to headset.\n");
+    fprintf(stdout, "Connected to headset.\n");
 
     r = emokit_read_data_timeout(d, 1000);
 
