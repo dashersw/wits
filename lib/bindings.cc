@@ -10,9 +10,7 @@ Modified example from https://staging.gitlab.com/jbergstroem/node.js/blob/f49dd2
 
 #define MAX_CANCEL_THREADS 6
 
-typedef struct
-{
-    int32_t _input;
+typedef struct {
     emokit_frame _output;
     napi_ref _callback;
     napi_async_work _request;
@@ -23,14 +21,11 @@ carrier the_carrier;
 napi_ref logger_callback;
 
 napi_env global_env;
-carrier async_carrier[MAX_CANCEL_THREADS];
 
-void Execute(napi_env env, void *data)
-{
+void Execute(napi_env env, void *data) {
     carrier *c = static_cast<carrier *>(data);
 
-    if (c != &the_carrier)
-    {
+    if (c != &the_carrier) {
         napi_throw_type_error(env, "400", "Wrong data parameter to Execute.");
         return;
     }
@@ -38,8 +33,7 @@ void Execute(napi_env env, void *data)
     c->_output = get_frame();
 }
 
-napi_value constructRetVal(napi_env env, emokit_frame f)
-{
+napi_value constructRetVal(napi_env env, emokit_frame f) {
     napi_status status;
 
     napi_value rv, levels, cq, gyro, battery, counter, gyroX, gyroY,
@@ -165,20 +159,17 @@ napi_value constructRetVal(napi_env env, emokit_frame f)
     return rv;
 }
 
-void Complete(napi_env env, napi_status status, void *data)
-{
+void Complete(napi_env env, napi_status status, void *data) {
     napi_status s;
 
     carrier *c = static_cast<carrier *>(data);
 
-    if (c != &the_carrier)
-    {
+    if (c != &the_carrier) {
         napi_throw_type_error(env, "400", "Wrong data parameter to Complete.");
         return;
     }
 
-    if (status != napi_ok)
-    {
+    if (status != napi_ok) {
         napi_throw_type_error(env, "400", "Execute callback failed.");
         return;
     }
@@ -205,8 +196,7 @@ void Complete(napi_env env, napi_status status, void *data)
     // napi_delete_async_work(env, c->_request);
 }
 
-napi_value read(napi_env env, napi_callback_info info)
-{
+napi_value read(napi_env env, napi_callback_info info) {
     napi_status status;
 
     size_t argc = 1;
@@ -280,8 +270,7 @@ napi_value setLogger(napi_env env, napi_callback_info info) {
     return nullptr;
 }
 
-napi_value disconnect(napi_env env, napi_callback_info info)
-{
+napi_value disconnect(napi_env env, napi_callback_info info) {
     close();
     return nullptr;
 }
@@ -291,8 +280,7 @@ napi_value disconnect(napi_env env, napi_callback_info info)
         (name), 0, (func), 0, 0, 0, napi_default, 0 \
     }
 
-napi_value _connect(napi_env env, napi_callback_info info)
-{
+napi_value _connect(napi_env env, napi_callback_info info) {
     napi_value connection;
     int rv = connect();
     napi_create_int32(env, rv, &connection);
@@ -300,8 +288,7 @@ napi_value _connect(napi_env env, napi_callback_info info)
     return connection;
 }
 
-napi_value Init(napi_env env, napi_value exports)
-{
+napi_value Init(napi_env env, napi_value exports) {
     napi_status status;
     global_env = env;
 
@@ -317,6 +304,7 @@ napi_value Init(napi_env env, napi_value exports)
     assert(status == napi_ok);
 
     fprintf(stdout, "set logger", NULL, log);
+
     return exports;
 }
 
