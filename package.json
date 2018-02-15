@@ -1,6 +1,6 @@
 {
   "name": "wits",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A Node.js library that reads your mind with Emotiv EPOC EEG headset",
   "main": "index.js",
   "keywords": [
