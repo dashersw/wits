@@ -1,23 +1,27 @@
-#include "node_api.h"
+#include <stdio.h>
+#include "string.h"
+#include <stdarg.h>
 
-int (* _logger_callback)(char * str);
+void (* _logger_callback)(char * str);
 
-void fprintf_override(char * a, char * b, char * c, int callback(char * str)) {
+void fprintf_override(const char * format, ...) {
+    va_list arg;
+
     if (_logger_callback) {
-        char str[strlen(b)];
-
-        sprintf(str, b, c);
+        char str[strlen(format)];
+        va_start(arg, format);
+        vsprintf(str, format, arg);
+        va_end(arg);
 
         _logger_callback(str);
 
         return;
     }
 
-    if (b == "set logger") {
-        _logger_callback = callback;
+    printf(format, arg);
+    va_end(arg);
+}
 
-        return;
-    }
-
-    printf(b, c);
+void set_logger(void callback(char * str)) {
+    _logger_callback = callback;
 }

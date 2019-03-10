@@ -303,7 +303,7 @@ napi_value Init(napi_env env, napi_value exports) {
 
     assert(status == napi_ok);
 
-    fprintf(stdout, "set logger", NULL, log);
+    set_logger(log);
 
     return exports;
 }
