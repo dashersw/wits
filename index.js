@@ -67,6 +67,6 @@ function _work(err, res) {
     emotiv.read(_work);
 }
 
-setLogger(console.log);
+setLogger(msg => console.log(msg.trim()));
 
 module.exports = { open, close, pause, read, resume, setLogger };

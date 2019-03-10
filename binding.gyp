@@ -20,8 +20,7 @@
         "/usr/local/lib/libmcrypt.4.4.8.dylib"
       ],
       "defines": [
-        "EXTERNAL_API",
-        "fprintf=fprintf_override"
+        "EXTERNAL_API"
       ],
       "cflags!": [
         "-fno-exceptions"

@@ -2,6 +2,7 @@
 #include <string.h>
 #include <signal.h>
 #include "emokit/emokit.h"
+#include "fprintf_override.c"
 
 int quit;
 
@@ -9,7 +10,7 @@ struct emokit_device *d;
 
 void close()
 {
-    fprintf(stdout, "closing...\n");
+    fprintf_override("closing...\n");
 
     quit = 1;
 
@@ -19,7 +20,7 @@ void close()
 
 void cleanup(int i)
 {
-    fprintf(stdout, "Shutting down\n");
+    fprintf_override("Shutting down\n");
     close();
 
     exit(i);
@@ -33,7 +34,7 @@ int connect()
 
     d = emokit_create();
     int count = emokit_get_count(d, EMOKIT_VID, EMOKIT_PID);
-    fprintf(stdout, "Current epoc devices connected: %d\n", count);
+    fprintf_override("Current epoc devices connected: %d\n", count);
 
     int r = emokit_open(d, EMOKIT_VID, EMOKIT_PID, 1);
     if (r != 0)
@@ -44,20 +45,20 @@ int connect()
         r = emokit_open(d, EMOKIT_VID, EMOKIT_PID, 0);
         if (r != 0)
         {
-            fprintf(stderr, "CANNOT CONNECT: %d\n", r);
+            fprintf_override("CANNOT CONNECT: %d\n", r);
             return 1;
         }
     }
-    fprintf(stdout, "Connected to headset.\n");
+    fprintf_override("Connected to headset.\n");
 
     r = emokit_read_data_timeout(d, 1000);
 
     if (r <= 0)
     {
         if (r < 0)
-            fprintf(stderr, "Error reading from headset\n");
+            fprintf_override("Error reading from headset\n");
         else
-            fprintf(stderr, "Headset Timeout...\n");
+            fprintf_override("Headset Timeout...\n");
         emokit_close(d);
         emokit_delete(d);
         return 1;
@@ -80,7 +81,7 @@ emokit_frame get_frame()
     }
     else if (err == 0)
     {
-        fprintf(stderr, "Headset Timeout...\n");
+        fprintf_override("Headset Timeout...\n");
     }
 
     return c;
