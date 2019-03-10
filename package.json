@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "preinstall": "if [ ! -d lib/emokit-c ] ; then git clone https://github.com/dashersw/emokit-c.git lib/emokit-c; fi",
-    "install": "node-gyp configure && node-gyp build"
+    "install": "node-gyp rebuild"
   },
   "repository": {
     "type": "git",
