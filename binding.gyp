@@ -15,9 +15,19 @@
         "lib/bindings.cc",
         "lib/emokit-c/src/emokit.c"
       ],
-      "libraries": [
-        "/usr/local/lib/libhidapi.0.dylib",
-        "/usr/local/lib/libmcrypt.4.4.8.dylib"
+      "conditions": [
+        ['OS=="linux"', {
+          'libraries': [
+            "/usr/lib/x86_64-linux-gnu/libhidapi-hidraw.so",
+            "/usr/lib/libmcrypt.so"
+          ]
+        }],
+        ['OS=="mac"', {
+          "libraries": [
+            "/usr/local/lib/libhidapi.0.dylib",
+            "/usr/local/lib/libmcrypt.4.4.8.dylib"
+          ]
+        }]
       ],
       "defines": [
         "EXTERNAL_API"
