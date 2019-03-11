@@ -6,19 +6,18 @@ void (* _logger_callback)(char * str);
 
 void fprintf_override(const char * format, ...) {
     va_list arg;
+    va_start(arg, format);
 
     if (_logger_callback) {
         char str[strlen(format)];
-        va_start(arg, format);
+
         vsprintf(str, format, arg);
-        va_end(arg);
 
         _logger_callback(str);
-
-        return;
+    } else {
+        vprintf(format, arg);
     }
 
-    printf(format, arg);
     va_end(arg);
 }
 
